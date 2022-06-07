@@ -58,4 +58,19 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get the qlinks associated with the user.
+     */
+    public function qlinks()
+    {
+        return $this->hasMany(Qlink::class);
+    }
+    /**
+     * Get the Queue Configuration associated with the user.
+     */
+    public function qconfig()
+    {
+        return $this->hasOne(QlinkConfiguration::class);
+    }
 }

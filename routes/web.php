@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Livewire\QlinkController;
+use App\Models\Qlink as ModelsQlink;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +15,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/laravel', function () {
+    return view('welcome_laravel');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/view', function () {
+    return ModelsQlink::all();
+});
+
+Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request');
+
+Route::get('/qlinks', [QlinkController::class, 'show'])->name('qlink.show');
 
 Route::middleware([
     'auth:sanctum',
@@ -25,4 +39,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/config', [QlinkController::class, 'configure'])->name('qlink.config');
+    Route::get('/qlinks/new', [QlinkController::class, 'create'])->name('qlink.create');
 });
