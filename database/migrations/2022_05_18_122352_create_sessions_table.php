@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         // Quick fix for AWS build - sessions table missing in migrations so do this check to avoid build error on migrate
         if (Schema::hasTable('sessions')) {
-            return;
+            return;  // OR Schema::dropIfExists('sessions');
         } else {
             Schema::create('sessions', function (Blueprint $table) {
                 $table->string('id')->primary();
