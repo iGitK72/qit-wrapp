@@ -6,10 +6,8 @@ use App\Models\Qlink;
 use App\Models\QlinkConfiguration;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -34,6 +32,7 @@ class CreateQlinkForm extends Component
     public $visitor_id;
     public $iowr_event_id;
     public $rlwr_event_id;
+    public $rlwr_event_id_allow_overwrite=false;
     public $visitor_identity_key;
     public $token_identifier;
     public $iowr_access_link;
@@ -99,6 +98,7 @@ class CreateQlinkForm extends Component
      */
     public function add()
     {
+        dd($this->rlwr_event_id_allow_overwrite);
         if ($this->iowr_csv_value) {
             $this->getCsvParts();
             $this->getAccessLinkParts();
@@ -249,7 +249,7 @@ class CreateQlinkForm extends Component
             $linkExists = Qlink::where('access_link', $this->iowr_access_link)->first();
             if ($linkExists) {
                 if ($linkExists->rlwr_event_id) {
-                    $this->rlwr_event_id = $linkExists->rlwr_event_id;
+                    $this->rlwr_event_id = ($this->rlwr_event_id_allow_overwrite) ? $this->rlwr_event_id : $linkExists->rlwr_event_id;
                 }
 
                 if ($linkExists->visitor_id === null) {
