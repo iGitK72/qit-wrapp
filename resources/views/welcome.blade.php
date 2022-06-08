@@ -438,6 +438,10 @@
                 Welcome to Queue-it WRapp!
             </div>
 
+            <a href="https://kehatest.queue-it.net/?c=kehatest&e=event1005"
+               class="mt-2 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                Claim a Demo Link
+            </a>
             <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
 
 
