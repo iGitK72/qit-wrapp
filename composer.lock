@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08438d090e0926267f2849225260c433",
+    "content-hash": "4513b73ca274ea73a8a2713126cb4d36",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3125,6 +3125,44 @@
                 "source": "https://github.com/bobthecow/psysh/tree/v0.11.4"
             },
             "time": "2022-05-06T12:49:14+00:00"
+        },
+        {
+            "name": "queueit/knownuserv3",
+            "version": "3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/queueit/KnownUser.V3.PHP.git",
+                "reference": "e509c6b65d745132f0d8173e218a9683f20ebc09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/queueit/KnownUser.V3.PHP/zipball/e509c6b65d745132f0d8173e218a9683f20ebc09",
+                "reference": "e509c6b65d745132f0d8173e218a9683f20ebc09",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ],
+                "exclude-from-classmap": [
+                    "**/Tests/**",
+                    "**/tests/**"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "description": "The Queue-it Security Framework is used to ensure that end users cannot bypass the queue by adding a server-side integration to your server.",
+            "support": {
+                "issues": "https://github.com/queueit/KnownUser.V3.PHP/issues",
+                "source": "https://github.com/queueit/KnownUser.V3.PHP/tree/3.7.0"
+            },
+            "time": "2021-12-02T13:53:50+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -8368,5 +8406,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
