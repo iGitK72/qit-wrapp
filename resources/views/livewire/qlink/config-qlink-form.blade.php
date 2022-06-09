@@ -70,5 +70,14 @@
                 </x-slot>
             @endif
         </x-jet-form-section>
+
+        @if (auth()->user()->email == 'kevinlhall72@gmail.com')
+            <x-jet-button wire:click="getNewIntConfig()" class="mt-4" type="button">
+                {{ __('Get new integrationconfig.json?') }}
+            </x-jet-button>
+            <x-jet-action-message class="mr-3" on="downloaded">
+                {{ __('Integration config loaded.') }}
+            </x-jet-action-message>
+        @endif
     </div>
 </div>

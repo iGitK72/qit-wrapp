@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class ConfigQlinkForm extends Component
@@ -126,13 +127,31 @@ class ConfigQlinkForm extends Component
     }
 
     /**
-     * Get the current user of the application.
+     * Super Admin:  Download new integrationconfig.json
      *
      * @return mixed
      */
-    public function getUserProperty()
+    public function getNewIntConfig()
     {
-        return Auth::user();
+        // Get local and get from server.  If newer version then upload the new.
+        $configText = Storage::disk('local')->get('integrationconfig.json');
+
+        $getUrl = "https://kehatest.queue-it.net/status/integrationconfig/secure/kehatest";
+
+        $response = Http::withHeaders([
+                            'api-key' => '96fabefd-247a-4c63-b773-6bbc1d219fbd',
+                        ])->get($getUrl);
+
+        $jsonDecoded = json_decode($response, false);
+        $jsonDecoded2 = json_decode($configText, false);
+
+        if ($jsonDecoded && $jsonDecoded2) {
+            if ($jsonDecoded->Version != $jsonDecoded2->Version) {
+                Storage::disk('local')->put('integrationconfig.json', $response);
+            }
+        }
+
+        $this->emit('downloaded');
     }
 
     public function render()
