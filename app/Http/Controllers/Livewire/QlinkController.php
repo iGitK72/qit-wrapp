@@ -60,7 +60,7 @@ class QlinkController extends Controller
     }
 
     /**
-     * Show the qlink configuration screen.
+     * Show the qlink configuration page.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
@@ -76,5 +76,14 @@ class QlinkController extends Controller
         } else {
             abort(403);
         }
+    }
+    /**
+     * Show the invite only page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function inviteOnly(Request $request)
+    {
+        return view('qlink.invite-only');
     }
 }
