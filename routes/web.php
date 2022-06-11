@@ -57,6 +57,6 @@ Route::middleware([
     'verified',
     'qitauth'
 ])->group(function () {
-    Route::get('/invite-only-with-auth', [QlinkController::class, 'inviteOnly'])->name('qlink.inviteonly'); // or you can just chain instead of using the qitauth groups, both work fine. ->middleware('queue-it');
-    Route::get('/iowr-with-auth', [QlinkController::class, 'inviteOnly'])->name('qlink.iowr');
+    Route::get('/invite-only-with-auth', [QlinkController::class, 'inviteOnlyAuth'])->name('qlink.inviteonly'); // or you can just chain instead of using the qitauth groups, both work fine. ->middleware('queue-it');
+    Route::get('/iowr-with-auth', [QlinkController::class, 'inviteOnlyAuth'])->name('qlink.iowr');
 });
