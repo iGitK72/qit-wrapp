@@ -133,25 +133,31 @@ class ConfigQlinkForm extends Component
      */
     public function getNewIntConfig()
     {
+        if (auth()->user()->email == 'kevinlhall72@gmail.com') {
+
         // Get local and get from server.  If newer version then upload the new.
-        $configText = Storage::disk('local')->get('integrationconfig.json');
+            $configText = Storage::disk('local')->get('integrationconfig.json');
 
-        $getUrl = "https://kehatest.queue-it.net/status/integrationconfig/secure/kehatest";
+            $getUrl = "https://kehatest.queue-it.net/status/integrationconfig/secure/kehatest";
 
-        $response = Http::withHeaders([
-                            'api-key' => '96fabefd-247a-4c63-b773-6bbc1d219fbd',
+            $response = Http::withHeaders([
+                            'api-key' => $this->api_access_key,
                         ])->get($getUrl);
 
-        $jsonDecoded = json_decode($response, false);
-        $jsonDecoded2 = json_decode($configText, false);
+            $jsonDecoded = json_decode($response, false);
+            $jsonDecoded2 = json_decode($configText, false);
 
-        if ($jsonDecoded && $jsonDecoded2) {
-            if ($jsonDecoded->Version != $jsonDecoded2->Version) {
-                Storage::disk('local')->put('integrationconfig.json', $response);
+            if ($jsonDecoded && $jsonDecoded2) {
+                if ($jsonDecoded->Version != $jsonDecoded2->Version) {
+                    Storage::disk('local')->put('integrationconfig.json', $response);
+                }
             }
+
+            $this->emit('downloaded');
+            return true;
         }
 
-        $this->emit('downloaded');
+        return false;
     }
 
     public function render()

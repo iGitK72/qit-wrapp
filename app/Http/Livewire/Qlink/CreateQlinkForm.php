@@ -117,6 +117,7 @@ class CreateQlinkForm extends Component
                 ['event_id' => $this->iowr_event_id,
                 'rlwr_event_id'  => $this->rlwr_event_id,
                 'user_id' => auth()->user()->id,
+                'team_id' => auth()->user()->current_team_id,
                 'visitor_id' => $this->visitor_id,
                 'access_link' => $this->iowr_access_link,
                 'visitor_identity_key' => $this->visitor_identity_key]
@@ -212,6 +213,7 @@ class CreateQlinkForm extends Component
                     ['event_id' => $this->iowr_event_id,
                     'rlwr_event_id'  => $this->rlwr_event_id,
                     'user_id' => auth()->user()->id,
+                    'team_id' => auth()->user()->current_team_id,
                     'visitor_id' => $this->visitor_id,
                     'access_link' => $this->iowr_access_link,
                     'visitor_identity_key' => $this->visitor_identity_key]

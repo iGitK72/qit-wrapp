@@ -98,18 +98,19 @@
                 </path>
             </svg>
             <div class="ml-4 text-lg text-gray-600 leading-7 font-semibold"><a
-                   href="{{ route('qlink.show') }}">Validate</a></div>
+                   href="{{ route('qlink.admin') }}">Manage</a></div>
         </div>
 
         <div class="ml-12">
             <div class="mt-2 text-sm text-gray-500">
-                To demo and test that the request link and unique login credentials have been used to enter and pass the
+                Manage your access links. Edit, upate, and validate links via api. To demo and test that the request
+                link and unique login credentials have been used to enter and pass the
                 IOWR you can use validate the queue-id here. This demonstrates the use of the API to retrieve
                 information about the queue-id and combines this with the "Lock & Key" configured for the uploaded IOWR
                 link.
             </div>
 
-            <a href="{{ route('qlink.show') }}">
+            <a href="{{ route('qlink.admin') }}">
                 <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
                     <div>Go to Validate</div>
 
@@ -140,6 +141,33 @@
             <div class="mt-2 text-sm text-gray-500">
                 Any sensitive data that is stored in this app is encrypted.
             </div>
+            <a href="{{ route('qlink.inviteo') }}">
+                <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
+                    <div>Guest Invite Only Gallery</div>
+
+                    <div class="ml-1 text-indigo-500">
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                            <path fill-rule="evenodd"
+                                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+            <a href="{{ route('qlink.inviteonly') }}">
+                <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
+                    <div>User Invite Only Gallery</div>
+
+                    <div class="ml-1 text-indigo-500">
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                            <path fill-rule="evenodd"
+                                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 </div>

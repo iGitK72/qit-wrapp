@@ -40,7 +40,9 @@ Route::middleware([
     Route::get('/config', [QlinkController::class, 'configure'])->name('qlink.config');
     Route::get('/qlinks/new', [QlinkController::class, 'create'])->name('qlink.create');
 
-    Route::get('/qlinks', [QlinkController::class, 'show'])->name('qlink.show');
+    Route::get('/qlinks', [QlinkController::class, 'index'])->name('qlink.index');
+    Route::get('/qlinks/admin', [QlinkController::class, 'admin'])->name('qlink.admin');
+    Route::get('/qlink/{id}', [QlinkController::class, 'show'])->name('qlink.show');
 
     Route::get('/view/config', function () {
         return QlinkConfiguration::all();
