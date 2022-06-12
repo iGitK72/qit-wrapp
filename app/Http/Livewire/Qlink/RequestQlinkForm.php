@@ -18,7 +18,9 @@ use NumberFormatter;
 class RequestQlinkForm extends Component
 {
     public $qlink;
+    public $query;
     public $access_link_exists;
+    public $decrypted;
     public $visitor_id;
     public $rlwr_event_id;
     public $status_messages = [];
@@ -56,10 +58,10 @@ class RequestQlinkForm extends Component
         $parts = parse_url($url);
 
         if (array_key_exists('query', $parts)) {
-            parse_str($parts['query'], $query);
+            parse_str($parts['query'], $this->query);
 
-            if (array_key_exists('qitts', $query)) {
-                $qitts = Carbon::createFromTimestamp($query['qitts']);
+            if (array_key_exists('qitts', $this->query)) {
+                $qitts = Carbon::createFromTimestamp($this->query['qitts']);
                 $validityDateTime = Carbon::now()->subMinutes(20);
                 if ($validityDateTime->lessThanOrEqualTo($qitts)) {
                     $this->params_valid = true;
@@ -67,25 +69,25 @@ class RequestQlinkForm extends Component
             }
 
             if ($this->params_valid) {
-                if (array_key_exists('qith', $query)) {
-                    $this->params_valid = ($query['qith'] === '') ? false : true ;
+                if (array_key_exists('qith', $this->query)) {
+                    $this->params_valid = ($this->query['qith'] === '') ? false : true ;
                 } else {
                     $this->params_valid = false;
                     $this->status_messages[] = 'Link has been tampered with.  Invalid hash.';
                     return false;
                 }
 
-                if (array_key_exists('qitc', $query) && $this->params_valid) {
-                    $this->params_valid = ($query['qitc'] === '') ? false : true ;
+                if (array_key_exists('qitc', $this->query) && $this->params_valid) {
+                    $this->params_valid = ($this->query['qitc'] === '') ? false : true ;
                 } else {
                     $this->params_valid = false;
                     $this->status_messages[] = 'Invalid customer.';
                     return false;
                 }
 
-                if (array_key_exists('qite', $query) && $this->params_valid) {
-                    $this->params_valid = ($query['qite'] === '') ? false : true ;
-                    $this->rlwr_event_id = $query['qite'];
+                if (array_key_exists('qite', $this->query) && $this->params_valid) {
+                    $this->params_valid = ($this->query['qite'] === '') ? false : true ;
+                    $this->rlwr_event_id = $this->query['qite'];
                 } else {
                     $this->params_valid = false;
                     $this->status_messages[] = 'Invalid event.';
@@ -104,10 +106,10 @@ class RequestQlinkForm extends Component
         }
 
         //Get qitc from parts and then get qlink config for that customer and validate qid has valid redirect time
-        $api_access_key = QlinkConfiguration::where('customer_id', $query['qitc'])->pluck('api_access_key');
+        $api_access_key = QlinkConfiguration::where('customer_id', $this->query['qitc'])->pluck('api_access_key');
 
         try {
-            $decrypted = Crypt::decryptString($api_access_key);
+            $this->decrypted = Crypt::decryptString($api_access_key);
         } catch (DecryptException $e) {
             //dd($e, $e->getMessage());
             $this->params_valid = false;
@@ -115,11 +117,11 @@ class RequestQlinkForm extends Component
             return false;
         }
 
-        $apiUrl = "https://" . $query['qitc'] . ".queue-it.net/api/queue/queueitem/". $query['qitc'] ."/queueid/" . $query['qitq'];
+        $apiUrl = "https://" . $this->query['qitc'] . ".queue-it.net/api/queue/queueitem/". $this->query['qitc'] ."/queueid/" . $this->query['qitq'];
         try {
             $response = Http::withHeaders([
                 'accept' => 'text/plain',
-                'api-key' => $decrypted,
+                'api-key' => $this->decrypted,
             ])->get($apiUrl);
         } catch (Exception $e) {
             //dd($e, $e->getMessage());
@@ -128,7 +130,7 @@ class RequestQlinkForm extends Component
             return false;
         }
 
-        $this->rlwr_queue_id = $query['qitq'];
+        $this->rlwr_queue_id = $this->query['qitq'];
         $this->rlwr_queue_id_used = false;
 
         if (!$response->successful()) {
