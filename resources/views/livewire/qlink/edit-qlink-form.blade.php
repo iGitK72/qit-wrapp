@@ -48,8 +48,12 @@
 
                 <span wire:click="$toggle('show_info_by_ti')">
                     <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
-                        <div class="{{ !$show_info_by_ti ? '' : 'hidden' }}"> Show QueueItem Info by Token</div>
-                        <div class="{{ $show_info_by_ti ? '' : 'hidden' }}"> Hide QueueItem Info by Token</div>
+                        <div class="{{ !$show_info_by_ti ? '' : 'hidden' }} underline">
+                            Show QueueItem Info by Token
+                        </div>
+                        <div class="{{ $show_info_by_ti ? '' : 'hidden' }} underline">
+                            Hide QueueItem Info by Token
+                        </div>
                     </div>
                 </span>
 
