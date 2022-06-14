@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request');
+Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request')->middleware('queue-it');
 
 Route::get('/invite-only', [QlinkController::class, 'inviteOnly'])->name('qlink.inviteo')->middleware('queue-it');
 
@@ -42,6 +42,7 @@ Route::middleware([
 
     Route::get('/qlinks', [QlinkController::class, 'index'])->name('qlink.index');
     Route::get('/qlinks/admin', [QlinkController::class, 'admin'])->name('qlink.admin');
+    Route::get('/qlink/{id}/verify', [QlinkController::class, 'verify'])->name('qlink.verify');
     Route::get('/qlink/{id}', [QlinkController::class, 'show'])->name('qlink.show');
 
     Route::get('/view/config', function () {

@@ -17,11 +17,16 @@ class QlinkController extends Controller
      */
     public function index()
     {
+        $myQlinks = Qlink::where('visitor_id', auth()->user()->email)->get();
+        $myAdminQlinks = Qlink::where('user_id', auth()->user()->id)
+        ->where('team_id', auth()->user()->current_team_id)
+        ->get();
+
+        $qlinks = $myQlinks->merge($myAdminQlinks);
+        
         return view('qlink.show', [
             'user' => auth()->user(),
-            'qlinks' => Qlink::where('user_id', auth()->user()->id)
-                ->where('team_id', auth()->user()->current_team_id)
-                ->get(),
+            'qlinks' => $qlinks,
         ]);
     }
     
@@ -53,22 +58,12 @@ class QlinkController extends Controller
      */
     public function show($id)
     {
-        /*
-
-            if (Gate::denies('view', $id)) {
-                  abort(403);
-              }
-*/
-
-        // See above Gate
+        // todo: Refactor to Gate policy
         $qlink = Qlink::find($id);
-        if ($qlink->user_id == auth()->user()->id) {
-            return view('livewire.qlink', [
-            'user' => auth()->user(),
-            //'team' => $team,
+        if ($qlink->user_id == auth()->user()->id || 'kevinlhall72@gmail.com' == auth()->user()->email) {
+            return view('qlink.edit', [
+                'qlink' => $qlink,
             ]);
-        
-            return $qlink;
         } else {
             abort(403);
         }
@@ -119,6 +114,24 @@ class QlinkController extends Controller
             abort(403);
         }
     }
+
+    /**
+     * Show the qlink verification page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function verify(Request $request)
+    {
+        if ($request->user()) {
+            return view('qlink.verify', [
+                'user' => $request->user(),
+            ]);
+        } else {
+            abort(403);
+        }
+    }
+
     /**
      * Show the invite only page.
      *

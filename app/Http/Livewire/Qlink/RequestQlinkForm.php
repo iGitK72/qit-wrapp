@@ -100,9 +100,7 @@ class RequestQlinkForm extends Component
                 return false;
             }
         } else {
-            $this->params_valid = false;
-            $this->status_messages[] = 'Invalid request.';
-            return false;
+            abort(404);
         }
 
         //Get qitc from parts and then get qlink config for that customer and validate qid has valid redirect time
@@ -135,7 +133,7 @@ class RequestQlinkForm extends Component
 
         if (!$response->successful()) {
             $this->params_valid = false;
-            $this->status_messages[] = 'Invalid request. You must go back to the waiting room and get a new place in line. - 1x01';   // Invalid Queue-id or Link tampered with
+            $this->status_messages[] = 'Invalid request. You must go back to the waiting room and get a new place in line. - 1x01 Qid verify Safetynet redirect';   // Invalid Queue-id or Link tampered with
             return false;
         } else {
             $redirectCount = count($response->json()['redirectDetails']) - 1;

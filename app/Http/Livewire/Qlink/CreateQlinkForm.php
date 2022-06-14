@@ -91,6 +91,11 @@ class CreateQlinkForm extends Component
         }
     }
 
+    public function render()
+    {
+        return view('livewire.qlink.create-qlink-form');
+    }
+    
     /**
      * Add reference info to IOWR link.
      *
@@ -397,10 +402,5 @@ class CreateQlinkForm extends Component
         $this->visitor_identity_key = '';
 
         return true;
-    }
-
-    public function render()
-    {
-        return view('livewire.qlink.create-qlink-form');
     }
 }
