@@ -94,11 +94,6 @@
                              wire:model.defer="qlink.rlwr_event_id" {{-- :disabled="! Gate::check('update', $qlink) " --}} />
 
                 <x-jet-input-error for="qlink.rlwr_event_id" class="mt-2" />
-
-                <x-jet-label for="rlwr_event_id_allow_overwrite"
-                             value="{{ __('Check to update/overwrite the RLWR') }}" />
-                <x-jet-checkbox id="rlwr_event_id_allow_overwrite" wire:model.defer="rlwr_event_id_allow_overwrite"
-                                class="mt-2" />
             </div>
 
         </x-slot>
