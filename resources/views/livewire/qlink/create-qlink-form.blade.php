@@ -44,17 +44,6 @@
                     <x-jet-input-error for="rlwr_event_id" class="mt-2" />
                 </div>
 
-
-                <!-- Invite Only Waiting Room ID -->
-                <div class="col-span-6 sm:col-span-4">
-                    <x-jet-label for="iowr_event_id" value="{{ __('IOWR Event ID') }}" />
-
-                    <x-jet-input id="iowr_event_id" type="text" class="mt-1 block w-full"
-                                 wire:model.defer="iowr_event_id" :disabled="true" />
-
-                    <x-jet-input-error for="iowr_event_id" class="mt-2" />
-                </div>
-
                 <!-- IOWR CSV Info -->
                 <div class="col-span-6 sm:col-span-4">
 
@@ -92,6 +81,17 @@
 
                     <x-jet-input-error for="visitor_identity_key" class="mt-2" />
                 </div>
+
+                <!-- Invite Only Waiting Room ID -->
+                <div class="col-span-6 sm:col-span-4">
+                    <x-jet-label for="iowr_event_id" value="{{ __('IOWR Event ID') }}" />
+
+                    <x-jet-input id="iowr_event_id" type="text" class="mt-1 block w-full"
+                                 wire:model.defer="iowr_event_id" :disabled="true" />
+
+                    <x-jet-input-error for="iowr_event_id" class="mt-2" />
+                </div>
+
 
             </x-slot>
 

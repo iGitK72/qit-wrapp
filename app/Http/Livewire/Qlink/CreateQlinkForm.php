@@ -48,20 +48,20 @@ class CreateQlinkForm extends Component
     protected $listeners = ['qconfigLoaded'];
 
     protected $rules = [
-        'rlwr_event_id' => 'required',
+        //'rlwr_event_id' => 'required',
         'iowr_access_link' => 'required_without:iowr_csv_value',
         'iowr_csv_value' => 'required_without:iowr_access_link',
     ];
 
     protected $messages = [
-        'rlwr_event_id.required' => 'The Request Link Waiting Room ID is required.',
+        //'rlwr_event_id.required' => 'The Request Link Waiting Room ID is required.',
         'iowr_access_link.required_without' => 'The IOWR Access Link is required.',
         'iowr_csv_value.required_without' => 'The IOWR CSV value or Access Link is required.'
     ];
 
     protected $validationAttributes =[
-        'visitorId' => 'Visitor User ID',
         'rlwr_event_id' => 'Request Link WR ID',
+        'visitorId' => 'Visitor User ID',
     ];
 
     public function qconfigLoaded($qconfig)
@@ -103,7 +103,8 @@ class CreateQlinkForm extends Component
      */
     public function add()
     {
-        dd($this->rlwr_event_id_allow_overwrite);
+        $this->validate();
+
         if ($this->iowr_csv_value) {
             $this->getCsvParts();
             $this->getAccessLinkParts();
@@ -113,7 +114,6 @@ class CreateQlinkForm extends Component
             }
         }
 
-        $validatedData = $this->validate();
 
         if ($this->isValidAccessLink()) {
             // Add/update the record to the Qlink table
@@ -153,12 +153,13 @@ class CreateQlinkForm extends Component
     {
         $this->resetErrorBag();     // Clear any errors manually set on forms
 
-        if ($this->rlwr_event_id === null || $this->rlwr_event_id == '') {
-            $this->alert_status = 'The Request Link Waiting Room ID is required.';
-            session()->flash('upload-status', $this->alert_status);
-        }
+        /* if ($this->rlwr_event_id === null || $this->rlwr_event_id == '') {
+             $this->alert_status = 'The Request Link Waiting Room ID is required.';
+             session()->flash('upload-status', $this->alert_status);
+         }
 
         $validatedData = $this->validateOnly('rlwr_event_id');
+        */
 
         if ($this->csvfile === null) {
             $this->alert_status = 'You must add a file to upload.';
