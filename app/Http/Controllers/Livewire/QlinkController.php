@@ -150,4 +150,22 @@ class QlinkController extends Controller
     {
         return view('qlink.invite-only-auth');
     }
+    /**
+     * Show the Jacquemus Demo Emails page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function jacquemus()
+    {
+        return view('customer-view', ['protected' => false]);
+    }
+    /**
+     * Show the Jacquemus Demo Protected page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function jacquemusProtected()
+    {
+        return view('customer-view', ['protected' => true]);
+    }
 }

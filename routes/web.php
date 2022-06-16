@@ -17,12 +17,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/laravel', function () {
-    return view('welcome_laravel');
+    return view('welcome-laravel');
 });
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/jacquemus', [QlinkController::class, 'jacquemus'])->name('demo.jacquemus')->middleware('queue-it');
+Route::get('/jacquemus/protected', [QlinkController::class, 'jacquemusProtected'])->name('demo.jacquemus-protected')->middleware('queue-it');
 
 Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request')->middleware('queue-it');
 
