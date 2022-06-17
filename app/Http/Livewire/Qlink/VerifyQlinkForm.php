@@ -77,11 +77,11 @@ class VerifyQlinkForm extends Component
         }
 
         foreach ($queueIds as $queueId) {
-            $apiUrl = "https://kehatest.queue-it.net/api/queue/queueitem/" . $customer_id . "/queueid/" . $queueId;
+            $apiUrl = "https://" . $customer_id . ".queue-it.net/api/queue/queueitem/" . $customer_id . "/queueid/" . $queueId;
 
             $response = Http::withHeaders([
                 'accept' => 'text/plain',
-                'api-key' => config('app.qit_api')
+                'api-key' => $api_access_key
             ])->get($apiUrl);
 
             $queueInfo = $response->json();
@@ -99,6 +99,10 @@ class VerifyQlinkForm extends Component
                     $this->confirmed = $verified;
                     break;
                 }
+            } else {
+                $messages = 'Sorry. You are missing credentials or the link is invalid. Switch Teams or report this Queue-id: '. $queueId;
+                $this->addError('visitor_id', $messages);
+                return;
             }
         }
 
