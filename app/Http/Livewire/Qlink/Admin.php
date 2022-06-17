@@ -25,7 +25,8 @@ class Admin extends Component
                     false !== stripos($value->event_id, $this->search) ||
                     false !== stripos($value->rlwr_event_id, $this->search) ||
                     false !== stripos($value->visitor_id, $this->search) ||
-                    false !== stripos($value->token_identifier, $this->search)
+                    false !== stripos($value->token_identifier, $this->search) ||
+                    false !== stripos($value->visitor_identity_key, $this->search)
                 );
             });
 
