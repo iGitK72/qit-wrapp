@@ -167,7 +167,16 @@ class QlinkController extends Controller
      */
     public function jacquemus()
     {
-        return view('customer-view', ['protected' => false]);
+        return view('customer-view', ['protected' => false, 'use_test_wr' => false]);
+    }
+    /**
+     * Show the Jacquemus Demo Emails page for TEST IOWR.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function jacquemusTest()
+    {
+        return view('customer-view', ['protected' => false, 'use_test_wr' => true]);
     }
     /**
      * Show the Jacquemus Demo Protected page.

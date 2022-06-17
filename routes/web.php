@@ -25,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::get('/jacquemus', [QlinkController::class, 'jacquemus'])->name('demo.jacquemus')->middleware('queue-it');
+Route::get('/jacquemus/test', [QlinkController::class, 'jacquemusTest'])->name('demo.jacquemustest')->middleware('queue-it');
 Route::get('/jacquemus/protected', [QlinkController::class, 'jacquemusProtected'])->name('demo.jacquemus-protected')->middleware('queue-it');
 
 Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request')->middleware('queue-it');

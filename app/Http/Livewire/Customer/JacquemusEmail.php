@@ -11,24 +11,20 @@ class JacquemusEmail extends Component
     public $link_one;
     public $link_two;
     public $link_three;
+    public $use_test_wr;
 
-    public function mount()
+    public function mount($use_test_wr=false)
     {
-        // Get qlink by eventid hardcoded to a Jacquemus known IOWR and RLWR combo
-        // If current qlink usage_count then find the first three qlink with same criteria plus usage_count != current usage_count
-        // If you can't find 3 then find the first equal to current usage_count and update usage_count++ and use that
-        //
-        // $link_one = $qlink->iowr_access_link, etc. up to _three
+        // Get qlink by eventid hardcoded to a Jacquemus known IOWR and a Test IOWR for preprod testing
+        $this->use_test_wr = $use_test_wr;
 
-        $qlinkNew = Qlink::find(401);
-        $qlinkNew->usage_count = 1;
-        $qlinkNew->save();
-        $qlinkNew = Qlink::find(402);
-        $qlinkNew->usage_count = 2;
-        $qlinkNew->save();
-
-        $qlinkIndex = Qlink::where('event_id', 'jacquemusxnike001')->orderBy('usage_count', 'desc')->limit(1)->get(['usage_count', 'event_id', 'id']);
-        $qlinksAll = Qlink::where('event_id', 'jacquemusxnike001')->get(['usage_count', 'event_id', 'id', 'access_link']);
+        if ($this->use_test_wr) {
+            $qlinkIndex = Qlink::where('event_id', 'jacquemusxniketest')->orderBy('usage_count', 'desc')->limit(1)->get(['usage_count', 'event_id', 'id']);
+            $qlinksAll = Qlink::where('event_id', 'jacquemusxniketest')->get(['usage_count', 'event_id', 'id', 'access_link']);
+        } else {
+            $qlinkIndex = Qlink::where('event_id', 'jacquemusxnike001')->orderBy('usage_count', 'desc')->limit(1)->get(['usage_count', 'event_id', 'id']);
+            $qlinksAll = Qlink::where('event_id', 'jacquemusxnike001')->get(['usage_count', 'event_id', 'id', 'access_link']);
+        }
 
         $qlinks = (is_null($qlinkIndex[0]['usage_count']))
             ? $qlinksAll->sortBy('usage_count')
