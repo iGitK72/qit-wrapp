@@ -139,7 +139,17 @@ class QlinkController extends Controller
      */
     public function inviteOnly()
     {
-        return view('qlink.invite-only');
+        return view('qlink.invite-only', ['guest' => false]);
+    }
+    
+    /**
+     * Show the invite only page for Guests.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function inviteOnlyGuest()
+    {
+        return view('qlink.invite-only', ['guest' => true]);
     }
     /**
      * Show the authenticated invite only page.

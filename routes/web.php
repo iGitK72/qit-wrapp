@@ -30,6 +30,7 @@ Route::get('/jacquemus/protected', [QlinkController::class, 'jacquemusProtected'
 Route::get('/qlink/request', [QlinkController::class, 'getLink'])->name('qlink.request')->middleware('queue-it');
 
 Route::get('/invite-only', [QlinkController::class, 'inviteOnly'])->name('qlink.inviteo')->middleware('queue-it');
+Route::get('/invite-only/guest', [QlinkController::class, 'inviteOnlyGuest'])->name('qlink.inviteoguest')->middleware('queue-it');
 
 Route::middleware([
     'auth:sanctum',

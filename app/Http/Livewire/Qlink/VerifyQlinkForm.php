@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Qlink;
 
 use App\Models\Qlink;
+use App\Models\QlinkConfiguration;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
@@ -10,110 +11,101 @@ use Livewire\Component;
 
 class VerifyQlinkForm extends Component
 {
-    public function mount($customer=null, $team=null)
+    protected $rules = [
+        'visitor_id' => 'required',
+    ];
+
+    protected $messages = [];
+
+    protected $validationAttributes =[
+        'visitor_id' => 'user id/e-mail',
+    ];
+
+    public $visitor_id;
+    public $confirmed=false;
+    public $showIowrWithAuth=false;
+
+    public function mount()
     {
-        dd($customer, $team);
-
-        if ($team) {
-            $teamId = $team;
-        } else {
-            $teamId = 1;
-            $this->noteam = true;
-        }
-
-        //$this->team = Jetstream::newTeamModel()->findOrFail($teamId);
-        // dd($this->noteam, $teamId, $this->team, $team, $customer);
-        
-        /*if (!$this->noteam) {
-            if (Gate::denies('view', $this->team)) {
-                abort(403);
-            }
-        }*/
-
-        $arr_cookie_options = array(
-                'expires' => time() + 60*60*24*30,
-                'path' => '/',
-                'domain' => '.example.com', // leading dot for compatibility or use subdomain
-                'secure' => true,     // or false
-                'httponly' => true,    // or false
-                'samesite' => 'None' // None || Lax  || Strict
-                );
-        $arr_cookie_options = array(
-                    'expires' => time() + 60*60*24*30,
-                    'path' => '/',
-                    'secure' => true,     // or false
-                    'httponly' => true,    // or false
-                    'samesite' => 'None' // None || Lax  || Strict
-                    );
-
-        setcookie('name', 'some value', $arr_cookie_options);
-        setcookie('QueueITAccepted-SDFrts345E-V3_kehatest', 'correct kehatest', $arr_cookie_options);
-        setcookie('QueueITAccepted-SDFrts345E-V3_kehatest4', 'kajfæajfdjækehatest', $arr_cookie_options);
-        setcookie('QueueITAccepted-SDFrts345E-V3_anotherone', 'anotherone', $arr_cookie_options);
-
-        if ($customer === null) {
-            $url = URL::full();
-            $parts = parse_url($url);
-            if (array_key_exists('query', $parts)) {
-                parse_str($parts['query'], $query);
-                if (array_key_exists('qitc', $query)) {
-                    $customer = $query['qitc'];
-                }
-                if (array_key_exists('qitq', $query)) {
-                    $queueId = $query['qitq'];
-                }
-            } else {
-                // Should error but defaulting KEHATEST
-            }
-
-            //dd(url()->full());
-        }
-
-        //a8c4820d-7a82-4b58-a816-88f31428c5c0
-        //dd($queueId);
-        // make this the Qlink Config table that stores only customer_id and api_key
-        //dd(auth()->user()->password);
-        $apiAccessKey = Qlink::where('customer_id', $customer)->get();
-        $apiAccessKey = 'auth()->user()->password';
-
-        $accesskeyEnc = Crypt::encryptString($apiAccessKey);
-
-        $accesskeyDec = Crypt::decryptString($accesskeyEnc);
-
-        //dd($accesskeyDec, $accesskeyEnc);
-        $apiUrl = "https://kehatest.queue-it.net/api/queue/queueitem/" . $customer . "/queueid/" . $queueId;
-
-        $response = Http::withHeaders([
-                'accept' => 'text/plain',
-                'api-key' => config('app.qit_api')
-            ])->get($apiUrl);
-
-        $queueInfo = $response->json();
-        //dd($response->json()['eventId']);
-        // $queueInfo['eventId'] == a valid Qlink record for the Customer ID then return an IOWR access link
-
-        $set = false;
-        $cookie_name = 'QueueITAccepted-SDFrts345E-V3_';
-        $qcookie = $cookie_name . $customer;
-
-        foreach ($_COOKIE as $name => $value) {
-            echo $value.'<br>';
-            if ((stripos($name, $cookie_name) === 0) && (stripos($value, $customer) !== false)) {
-                echo "A Cookie named '$name' is set with value '$value'!".'<br>';
-                if ($name === $qcookie) {
-                    echo "The Cookie named '$name' is set with value '$value'!".'<br>';
-                }
-                // check qlink table to see if this exists with the customer id and the
-                $set = true;
-            }
-        }
-        if (!$set) {
-            echo 'No cookie found :(';
-        }
     }
         
     public function render()
     {
         return view('livewire.qlink.verify-qlink-form');
+    }
+
+    public function confirm()
+    {
+        if (!auth()->check()) {
+            $this->showIowrWithAuth = true;
+            $this->alert_status = 'You must login/register to start a spree.';
+            session()->flash('alert-status', $this->alert_status);
+            $this->confirmed = true;
+            $this->confirmed = false;
+            return;
+        }
+
+        $this->validate();
+
+        if ($this->confirmed === true) {
+            $this->confirmed = !$this->confirmed;
+            return;
+        }
+
+        $verified = false;
+        $url = URL::full();
+        $parts = parse_url($url);
+
+        foreach ($_COOKIE as $name => $value) {
+            if (($parts['host'] === 'localhost') && (stripos($value, 'QueueId=') !== false)) {
+                parse_str($value, $output);
+                $queueIds[] = $output['QueueId'];
+            }
+        }
+
+        $qconfig = QlinkConfiguration::where('user_id', auth()->user()->id)
+        ->where('team_id', auth()->user()->current_team_id)
+        ->first();
+
+        if (!is_null($qconfig)) {
+            $customer_id = $qconfig->customer_id;
+            $api_access_key = Crypt::decryptString($qconfig->api_access_key);
+        } else {
+            $this->showIowrWithAuth = true;
+            $this->alert_status = 'You are missing QConfiguration credentials. Go to Admin or switch Teams.';
+            session()->flash('alert-status', $this->alert_status);
+            return;
+        }
+
+        foreach ($queueIds as $queueId) {
+            $apiUrl = "https://kehatest.queue-it.net/api/queue/queueitem/" . $customer_id . "/queueid/" . $queueId;
+
+            $response = Http::withHeaders([
+                'accept' => 'text/plain',
+                'api-key' => config('app.qit_api')
+            ])->get($apiUrl);
+
+            $queueInfo = $response->json();
+
+            if ($response->successful()) {
+                $qlinkFound = Qlink::where('token_identifier', $queueInfo['tokenIdentifier'])->first();
+
+                if (is_null($qlinkFound->visitor_id)) {
+                    $qlinkFound->visitor_id = $this->visitor_id;
+                    $qlinkFound->save();
+                }
+
+                $verified = ($qlinkFound->visitor_id == $this->visitor_id);
+                if ($verified) {
+                    $this->confirmed = $verified;
+                    break;
+                }
+            }
+        }
+
+        if (!$verified) {
+            $this->addError('visitor_id', 'Sorry. The user id/email does not match this access link. Try again.');
+            return;
+        }
     }
 }

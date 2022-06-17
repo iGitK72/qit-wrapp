@@ -6,8 +6,14 @@
     </x-slot>
 
     <div>
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-            @livewire('qlink.invite-only-view')
-        </div>
+        @if ($guest)
+            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                @livewire('qlink.invite-only-view', ['show_auth' => false])
+            </div>
+        @else
+            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                @livewire('qlink.invite-only-view')
+            </div>
+        @endif
     </div>
 </x-guest-layout>

@@ -169,7 +169,7 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ route('qlink.inviteo') }}">
+            <a href="{{ route('qlink.inviteoguest') }}">
                 <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
                     <div>Guest Invite Only Gallery</div>
 

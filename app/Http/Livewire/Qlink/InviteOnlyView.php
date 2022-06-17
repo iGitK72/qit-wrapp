@@ -6,15 +6,19 @@ use Livewire\Component;
 
 class InviteOnlyView extends Component
 {
-    public $show_auth_content;
+    public $show_auth;
 
-    public function mount($show_auth=false)
+    public function mount($show_auth=true)
     {
-        $this->show_auth_content = $show_auth;
+        if ($show_auth) {
+            $this->show_auth = auth()->check();
+        } else {
+            $this->show_auth = false;
+        }
     }
 
     public function render()
     {
-        return view('livewire.qlink.invite-only-view');
+        return view('livewire.qlink.invite-only-view', ['show_auth_content' => $this->show_auth]);
     }
 }

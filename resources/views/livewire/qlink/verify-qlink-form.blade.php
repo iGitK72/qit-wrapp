@@ -1,98 +1,50 @@
-<div>
-    <x-jet-form-section submit="update">
-        <x-slot name="title">
-            {{ __('Link Information') }}
-        </x-slot>
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
 
-        <x-slot name="description">
-            {{ __('Link the Invite Only WR access links to the User/Email and/or Request Link WR .') }}
-        </x-slot>
+    <section class="gradient w-full mx-auto text-center pt-6 pb-12">
+        @if (!$confirmed && !session('alert-status'))
+            <h2 class="w-full my-2 text-5xl font-black leading-tight text-center text-blue-600/75">
+                Your 80% Off Spree is ready!
+            </h2>
+            <div class="w-full mb-4">
+                <div class="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
+            </div>
 
-        <x-slot name="form">
+            <h3 class="my-4 text-3xl text-gray-400 font-extrabold">
+                Enter your user id/email to confirm your discount and start your 2 hour spree.
+            </h3>
+
             <!-- Visitor ID -->
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="visitor_id" value="{{ __('Visitor User ID') }}" />
+            <div class="w-full">
 
-                <x-jet-input id="visitor_id" type="text" class="mt-1 block w-full" wire:model.defer="visitor_id"
-                             {{-- :disabled="! Gate::check('update', $team)" --}} />
-
+                <x-jet-input id="visitor_id" type="text" class="mt-1 block w-1/2 mx-auto"
+                             wire:model.defer="visitor_id" />
+                <x-jet-label for="visitor_id"
+                             value="{{ __('Enter the user id/email that was used to claim your special access link.') }}" />
                 <x-jet-input-error for="visitor_id" class="mt-2" />
             </div>
 
-            <!-- Request Link Waiting Room ID -->
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="rlwr_event_id" value="{{ __('Request Link Waiting Room ID') }}" />
+            <button wire:click="confirm()"
+                    class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded my-6 py-4 px-8 shadow-lg">
+                Confirm!
+            </button>
+        @endif
+        @if ($confirmed)
+            <h3 class="my-4 text-3xl text-gray-400 font-extrabold">
+                Your shopping spree has started.
+            </h3>
+        @endif
 
-                <x-jet-input id="rlwr_event_id" type="text" class="mt-1 block w-full" wire:model.defer="rlwr_event_id"
-                             {{-- :disabled="! Gate::check('update', $qlink) " --}} />
-
-                <x-jet-label for="rlwr_event_id_allow_overwrite"
-                             value="{{ __('Check to update/overwrite the RLWR') }}" />
-                <x-jet-checkbox id="rlwr_event_id_allow_overwrite" wire:model.defer="rlwr_event_id_allow_overwrite"
-                                class="mt-2" />
-
-                <x-jet-input-error for="rlwr_event_id" class="mt-2" />
+        @if (session('alert-status'))
+            <div class="mt-2 text-red-600">
+                <h3 class="my-4 text-3xl text-gray-400 font-extrabold">
+                    {{ session('alert-status') }}
+                </h3>
+                <a href="/invite-only-with-auth"
+                   class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded my-6 py-4 px-8 shadow-lg">
+                    Go to Login
+                </a>
             </div>
+        @endif
 
-
-            <!-- Invite Only Waiting Room ID -->
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="iowr_event_id" value="{{ __('IOWR Event ID') }}" />
-
-                <x-jet-input id="iowr_event_id" type="text" class="mt-1 block w-full" wire:model.defer="iowr_event_id"
-                             :disabled="true" />
-
-                <x-jet-input-error for="iowr_event_id" class="mt-2" />
-            </div>
-
-            <!-- IOWR CSV Info -->
-            <div class="col-span-6 sm:col-span-4">
-
-                <span class="italic"> Enter value from Invite Only csv or Access Link</span>
-                <x-jet-label for="iowr_csv_value" value="{{ __('IOWR CSV Value') }}" />
-
-                <x-jet-input id="iowr_csv_value" type="text" class="mt-1 block w-full" wire:model.defer="iowr_csv_value"
-                             {{-- :disabled="! Gate::check('update', $qlink) " --}} />
-
-                <x-jet-input-error for="iowr_csv_value" class="mt-2" />
-            </div>
-
-            <!-- IOWR Access Link (use this or the Event ID above) -->
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="iowr_access_link" value="{{ __('IOWR Access Link') }}" />
-
-                <x-jet-input id="iowr_access_link" type="text" class="mt-1 block w-full"
-                             wire:model.defer="iowr_access_link" {{-- :disabled="! Gate::check('update', $qlink) " --}} />
-
-                <x-jet-input-error for="iowr_access_link" class="mt-2" />
-            </div>
-
-            <!-- IOWR Visitor Identity Key -->
-            <div class="col-span-6 sm:col-span-4">
-                <x-jet-label for="visitor_identity_key" value="{{ __('Visitor Identity Key') }}" />
-
-                <x-jet-input id="visitorIdentityKey" type="text" class="mt-1 block w-full"
-                             wire:model.defer="visitor_identity_key" :disabled="true" />
-
-                @if (session('alert-status'))
-                    <div class="mt-2 text-red-600">
-                        {{ session('alert-status') }}
-                    </div>
-                @endif
-
-                <x-jet-input-error for="visitor_identity_key" class="mt-2" />
-            </div>
-
-        </x-slot>
-
-        <x-slot name="actions">
-            <x-jet-action-message class="mr-3" on="saved">
-                {{ __('New link saved.') }}
-            </x-jet-action-message>
-
-            <x-jet-button>
-                {{ __('Update') }}
-            </x-jet-button>
-        </x-slot>
-    </x-jet-form-section>
+    </section>
 </div>
