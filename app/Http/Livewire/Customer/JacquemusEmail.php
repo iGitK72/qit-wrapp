@@ -28,14 +28,16 @@ class JacquemusEmail extends Component
         $qlinkNew->save();
 
         $qlinkIndex = Qlink::where('event_id', 'jacquemusxnike001')->orderBy('usage_count', 'desc')->limit(1)->get(['usage_count', 'event_id', 'id']);
-        //dd($qlinkIndex);
-        $qlinksAll = Qlink::where('event_id', 'jacquemusxnike001')->limit(10)->get(['usage_count', 'event_id', 'id', 'access_link']);
-        $qlinks = $qlinksAll->where('usage_count', '!=', $qlinkIndex[0]['usage_count'])->sortBy('usage_count');
-        
-        if ($qlinks) {
+        $qlinksAll = Qlink::where('event_id', 'jacquemusxnike001')->get(['usage_count', 'event_id', 'id', 'access_link']);
+
+        $qlinks = (is_null($qlinkIndex[0]['usage_count']))
+            ? $qlinksAll->sortBy('usage_count')
+            : $qlinksAll->where('usage_count', '<=', $qlinkIndex[0]['usage_count'])->sortBy('usage_count')->take(10);
+           
+        if (!$qlinks->isEmpty()) {
             $i=1;
             foreach ($qlinks as $qlink) {
-                if ($qlink->usage_count || $qlink->usage_count < $qlinkIndex[0]['usage_count']) {
+                if ((is_null($qlinkIndex[0]['usage_count'])) || $qlink->usage_count || $qlink->usage_count < $qlinkIndex[0]['usage_count']) {
                     $this->links[$i] = $qlink->access_link;
                     $qlink->usage_count = is_null($qlink->usage_count) ? 1 : $qlink->usage_count + 1;
                     $qlink->save();
