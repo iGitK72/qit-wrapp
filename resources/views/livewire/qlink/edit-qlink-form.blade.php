@@ -39,6 +39,16 @@
                 <x-jet-input-error for="qlink.visitor_identity_key" class="mt-2" />
             </div>
 
+            <!-- Usage Count -->
+            <div class="col-span-6 sm:col-span-4">
+                <x-jet-label for="qlink.usage_count" value="{{ __('Used Count') }}" />
+
+                <x-jet-input id="qlink.usage_count" type="text" class="text-gray-400 mt-1 block w-full"
+                             wire:model.defer="qlink.usage_count" :disabled="true" />
+
+                <x-jet-input-error for="qlink.usage_count" class="mt-2" />
+            </div>
+
             <!-- Token Identifier -->
             <div class="col-span-6 sm:col-span-4">
                 <x-jet-label for="qlink.token_identifier" value="{{ __('Token Identifier') }}" />
