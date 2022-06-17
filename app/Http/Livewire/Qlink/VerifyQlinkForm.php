@@ -53,11 +53,10 @@ class VerifyQlinkForm extends Component
         }
 
         $verified = false;
-        $url = URL::full();
-        $parts = parse_url($url);
+        $queueIds = [];
 
         foreach ($_COOKIE as $name => $value) {
-            if (($parts['host'] === 'localhost') && (stripos($value, 'QueueId=') !== false)) {
+            if ((stripos($value, 'QueueId=') !== false)) {
                 parse_str($value, $output);
                 $queueIds[] = $output['QueueId'];
             }
