@@ -31,4 +31,19 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'qit' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Queue-it API KEY
+        |--------------------------------------------------------------------------
+        |
+        | Valid API key for use on customer id on Swagger UI or UI Item
+        |
+        */
+    
+        'api' => env('QIT_API'),
+        'secret_key' => env('QIT_SECRET_KEY'),
+    
+    ]
+
 ];
