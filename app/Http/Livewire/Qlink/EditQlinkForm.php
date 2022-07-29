@@ -82,6 +82,11 @@ class EditQlinkForm extends Component
         }
         
         $tokenDetails = Arr::dot($response->json());
+        if ($tokenDetails['status'] == '404') {
+            // Override type to message that link has not been used so no queue id exists yet and therefore no info
+            // QueueItem info is saved for 7 days only
+            $tokenDetails['type'] = 'Link has not been used.  No Queue ID info available.';
+        }
         $this->queue_item_details = $tokenDetails;
     }
 }
